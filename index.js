@@ -1,13 +1,11 @@
 const { Toolkit } = require('actions-toolkit')
 
 Toolkit.run(async tools => {
-    let number = null
+    
     const { context } = tools
     tools.log.info(`Event type is: ${context.event}`)
     tools.log.info(`Payload is: ${JSON.stringify(context.payload)}`)
-    if (context.event === 'pull_request') {
-        let { number } = context.payload
-    }
+    let { number } = context.payload
 
     const {
         status_true_message = "Success",
