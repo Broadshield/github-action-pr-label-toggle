@@ -1,0 +1,59 @@
+name: Pull Release Label Toggle
+description: >
+  Allows toggling of a label between two states, such as success or failure.
+  This action should be used with: if: ${{ always() }}
+  This action will check the actual status
+  i.e. `Unit Tests Success` __> `Unit Tests Failing`
+  To access other repos pull requests, add an environment variable to this action of:
+  ```yaml
+  env:
+    GITHUB_TOKEN: ${{ secrets.OTHER_TOKEN }}
+  ```
+branding:
+  icon: 'book_open'
+  color: 'blue'
+inputs:
+  status_true_message:
+    description: This is a word like Passing, Success, Found, or 👍
+    required: false
+    default: Success
+  status_false_message:
+    description: This is a word like Error, Failure, Success, Not Found, or 👎
+    required: false
+    default: Failed
+  label_prefix:
+    description: The prefix of the label to toggle like Unit Tests, DB Dump
+    required: true
+  status:
+    description: >
+      This is a boolean status that can be passed in to override the detected status:
+      eg.
+      status: ${{ steps.tests.outputs.status }}
+      or
+      status: ${{ needs.unit_test.outputs.status }}
+    required: false
+  pr_number:
+    description: >
+      The PR number to change the labels on. This is used when the action is triggered
+      by something other than a PR such as a PR comment, or a push, or anything else.
+    required: false
+  repository:
+    description: >
+      If not provided, this is the same as ${{ github.repository }} i.e: 
+      The owner and repository name. For example, Codertocat/Hello_World
+    required: false
+  generate_only:
+    description: If true, do not update the label, just output the generated name
+  
+outputs:
+  add_label_name:
+    description: The label name to add
+  remove_label_name:
+    description: The label name to remove
+  repository:
+    description: The repository to update
+  pr_number:
+    description: The pull request that is updated
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

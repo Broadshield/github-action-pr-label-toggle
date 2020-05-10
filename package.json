@@ -1,0 +1,45 @@
+{
+  "name": "github-action-git-jira-changelog",
+  "version": "1.0.0",
+  "description": "This action generates a change log file from commit messages. Grouping Jira Commits, Conventional Commits, and summarizing minor changes",
+  "main": "index.js",
+  "repository": "git@github.com:Broadshield/github-action-git-jira-changelog.git",
+  "author": "Jamie Nelson <jamie@wearsafe.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "actions-toolkit": "^4.0.0"
+  },
+  "devDependencies": {
+    "@atlassian-partner-engineering/eslint-config": "*",
+    "@zeit/ncc": "^0.20.4",
+    "commitizen": "^4.0.4",
+    "eslint": "^5.13.0",
+    "husky": "^4.2.5",
+    "jest": "^25.2.7"
+  },
+  "scripts": {
+    "test": "NODE_ENV=testing jest",
+    "start": "node ./index.js",
+    "build": "ncc build index.js --minify"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/helpers/",
+      "/node_modules/"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn run build;git add dist"
+    }
+  }
+}
