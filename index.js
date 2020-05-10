@@ -1,11 +1,12 @@
 const { Toolkit } = require('actions-toolkit')
 
 Toolkit.run(async tools => {
-    let event_pr_number = null
+    let number = null
     const { context } = tools
     tools.log.info(`Event type is: ${context.event}`)
+    tools.log.info(`Payload is: ${context.payload}`)
     if (context.event === 'pull_request') {
-        event_pr_number = context.payload.number
+        let { number } = context.payload
     }
 
     const {
@@ -13,12 +14,13 @@ Toolkit.run(async tools => {
         status_false_message = "Failed",
         label_prefix,
         status,
-        pr_number = event_pr_number,
+        pr_number,
         repository = context.repository,
         generate_only = false
     } = tools.inputs
-
-    if (!pr_number) {
+    
+    number = pr_number || number
+    if (!number) {
         tools.exit.failure('This is not a pull_request event, and there was no pr_number provided!')
     }
     if (!repository) {
@@ -43,7 +45,7 @@ Toolkit.run(async tools => {
     tools.core.setOutput('add_label_name', addLabel)
     tools.core.setOutput('remove_label_name', removeLabel)
     tools.core.setOutput('repository', repository)
-    tools.core.setOutput('pr_number', pr_number)
+    tools.core.setOutput('pr_number', number)
 
 
     if (generate_only === true || generate_only === 'true') {
@@ -53,13 +55,13 @@ Toolkit.run(async tools => {
 
     const { owner, repo } = repository.split('/')
 
-    const pull_response = await tools.github.pulls.get({ owner: owner, repo: repo, pull_number: pr_number })
+    const pull_response = await tools.github.pulls.get({ owner: owner, repo: repo, pull_number: number })
 
     const { id, labels } = pull_response.data
     let addLabelExists = false
     for (let l of labels) {
         if (l.name.startsWith(removeLabel)) {
-            github.issues.removeLabel({ issue_number: pr_number, owner: owner, repo: repo, name: removeLabel })
+            github.issues.removeLabel({ issue_number: number, owner: owner, repo: repo, name: removeLabel })
         }
         if (l.name.startsWith(addLabel)) {
             addLabelExists = true
@@ -67,7 +69,7 @@ Toolkit.run(async tools => {
     }
 
     if (addLabelExists === false) {
-        github.issues.addLabels({ issue_number: pr_number, owner: owner, repo: repo, labels: [addLabel] })
+        github.issues.addLabels({ issue_number: number, owner: owner, repo: repo, labels: [addLabel] })
     }
 
 
