@@ -8,10 +8,10 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@actions/core": "^1.2.4",
     "actions-toolkit": "^4.0.0"
   },
   "devDependencies": {
-    "@atlassian-partner-engineering/eslint-config": "*",
     "@zeit/ncc": "^0.20.4",
     "commitizen": "^4.0.4",
     "eslint": "^5.13.0",

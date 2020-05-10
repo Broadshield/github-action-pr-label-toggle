@@ -1,4 +1,5 @@
 const { Toolkit } = require('actions-toolkit')
+const core = require('@actions/core')
 
 Toolkit.run(async tools => {
     
@@ -41,10 +42,10 @@ Toolkit.run(async tools => {
         removeLabel = `${label_prefix} ${status_true_message}`
     }
 
-    tools.core.setOutput('add_label_name', addLabel)
-    tools.core.setOutput('remove_label_name', removeLabel)
-    tools.core.setOutput('repository', repos)
-    tools.core.setOutput('pr_number', number)
+    core.setOutput('add_label_name', addLabel)
+    core.setOutput('remove_label_name', removeLabel)
+    core.setOutput('repository', repos)
+    core.setOutput('pr_number', number)
 
 
     if (generate_only === true || generate_only === 'true') {
