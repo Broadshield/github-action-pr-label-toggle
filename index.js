@@ -4,7 +4,6 @@ Toolkit.run(async tools => {
     
     const { context } = tools
     tools.log.info(`Event type is: ${context.event}`)
-    tools.log.info(`Payload is: ${JSON.stringify(context.payload)}`)
     let { number } = context.payload
 
     const {
@@ -13,7 +12,7 @@ Toolkit.run(async tools => {
         label_prefix,
         status,
         pr_number,
-        repository = context.repository,
+        repository = process.env.GITHUB_REPOSITORY,
         generate_only = false
     } = tools.inputs
     
