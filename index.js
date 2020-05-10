@@ -54,21 +54,24 @@ Toolkit.run(async tools => {
     }
 
     const { owner, repo } = repos.split('/')
-
+    core.debug(`The query fields: ${JSON.stringify({ owner: owner, repo: repo, pull_number: number })}`)
     const pull_response = await tools.github.pulls.get({ owner: owner, repo: repo, pull_number: number })
 
     const { id, labels } = pull_response.data
     let addLabelExists = false
     for (let l of labels) {
         if (l.name.startsWith(removeLabel)) {
+            core.debug(`Removing label ${removeLabel}`)
             github.issues.removeLabel({ issue_number: number, owner: owner, repo: repo, name: removeLabel })
         }
         if (l.name.startsWith(addLabel)) {
+            core.debug(`Label ${addLabel} already in place`)
             addLabelExists = true
         }
     }
 
     if (addLabelExists === false) {
+        core.debug(`Adding label ${addLabel}`)
         github.issues.addLabels({ issue_number: number, owner: owner, repo: repo, labels: [addLabel] })
     }
 
