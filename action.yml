@@ -1,13 +1,13 @@
 name: Pull Release Label Toggle
 description: >
   Allows toggling of a label between two states, such as success or failure.
-  This action should be used with: if: ${{ always() }}
+  This action should be used with: if: always()
   This action will check the actual status
-  i.e. `Unit Tests Success` __> `Unit Tests Failing`
+  i.e. `Unit Tests Success` > `Unit Tests Failing`
   To access other repos pull requests, add an environment variable to this action of:
   ```yaml
   env:
-    GITHUB_TOKEN: ${{ secrets.OTHER_TOKEN }}
+    GITHUB_TOKEN: your token
   ```
 branding:
   icon: 'book_open'
@@ -26,11 +26,7 @@ inputs:
     required: true
   status:
     description: >
-      This is a boolean status that can be passed in to override the detected status:
-      eg.
-      status: ${{ steps.tests.outputs.status }}
-      or
-      status: ${{ needs.unit_test.outputs.status }}
+      This is a boolean status that can be passed in to override the detected status.
     required: false
   pr_number:
     description: >
@@ -39,7 +35,7 @@ inputs:
     required: false
   repository:
     description: >
-      If not provided, this is the same as ${{ github.repository }} i.e: 
+      If not provided, this is the same as github.repository i.e: 
       The owner and repository name. For example, Codertocat/Hello_World
     required: false
   generate_only:
