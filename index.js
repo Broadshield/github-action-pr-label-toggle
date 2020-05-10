@@ -3,7 +3,8 @@ const { Toolkit } = require('actions-toolkit')
 Toolkit.run(async tools => {
     let event_pr_number = null
     const { context } = tools
-    if (tools.context.event === 'pull_request') {
+    tools.log.info(`Event type is: ${context.event}`)
+    if (context.event === 'pull_request') {
         event_pr_number = context.payload.number
     }
 
