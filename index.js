@@ -4,7 +4,7 @@ Toolkit.run(async tools => {
     let number = null
     const { context } = tools
     tools.log.info(`Event type is: ${context.event}`)
-    tools.log.info(`Payload is: ${JSON.dumps(context.payload)}`)
+    tools.log.info(`Payload is: ${JSON.stringify(context.payload)}`)
     if (context.event === 'pull_request') {
         let { number } = context.payload
     }
