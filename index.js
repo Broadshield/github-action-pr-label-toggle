@@ -80,7 +80,7 @@ Toolkit.run(async tools => {
     for (let l of labels) {
         if (l.name.startsWith(removeLabel)) {
             core.debug(`Removing label ${removeLabel}`)
-            github.issues.removeLabel({ ...repos, issue_number: number, name: removeLabel })
+            tools.github.issues.removeLabel({ ...repos, issue_number: number, name: removeLabel })
         }
         if (l.name.startsWith(addLabel)) {
             core.debug(`Label ${addLabel} already in place`)
@@ -90,7 +90,7 @@ Toolkit.run(async tools => {
 
     if (addLabelExists === false) {
         core.debug(`Adding label ${addLabel}`)
-        github.issues.addLabels({ ...repos, issue_number: number, labels: [addLabel] })
+        tools.github.issues.addLabels({ ...repos, issue_number: number, labels: [addLabel] })
     }
 
 
