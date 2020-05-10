@@ -32,10 +32,10 @@ Toolkit.run(async tools => {
             return { owner, repo }
         }
 
-        if (this.payload.repository) {
+        if (context.payload.repository) {
             return {
-                owner: this.payload.repository.owner.login,
-                repo: this.payload.repository.name
+                owner: context.payload.repository.owner.login,
+                repo: context.payload.repository.name
             }
         }
 
@@ -44,7 +44,9 @@ Toolkit.run(async tools => {
 
     repos = repo(repository)
 
-    if (!status) { } else if (status === '') {
+    if (!status) { 
+        core.debug(JSON.stringify(context, null, "  "))
+    } else if (status === '') {
         tools.log.success('The status was an empty string. \n\
         This happens when the output of the step being checked for a status is empty, \n\
         and its empty because it errored without handling that error. \n\
