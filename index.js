@@ -12,7 +12,7 @@ Toolkit.run(async tools => {
         label_prefix,
         status,
         pr_number,
-        repository = process.env.GITHUB_REPOSITORY,
+        repository,
         generate_only = false
     } = tools.inputs
     
@@ -20,7 +20,9 @@ Toolkit.run(async tools => {
     if (!number) {
         tools.exit.failure('This is not a pull_request event, and there was no pr_number provided!')
     }
-    if (!repository) {
+
+    repos = repository || process.env.GITHUB_REPOSITORY
+    if (!repos) {
         tools.exit.failure('There was no repository found or provided!')
     }
     if (!status) { } else if (status === '') {
@@ -41,7 +43,7 @@ Toolkit.run(async tools => {
 
     tools.core.setOutput('add_label_name', addLabel)
     tools.core.setOutput('remove_label_name', removeLabel)
-    tools.core.setOutput('repository', repository)
+    tools.core.setOutput('repository', repos)
     tools.core.setOutput('pr_number', number)
 
 
@@ -50,7 +52,7 @@ Toolkit.run(async tools => {
         tools.exit.success('We did it team!')
     }
 
-    const { owner, repo } = repository.split('/')
+    const { owner, repo } = repos.split('/')
 
     const pull_response = await tools.github.pulls.get({ owner: owner, repo: repo, pull_number: number })
 
