@@ -2,7 +2,7 @@ const { Toolkit } = require('actions-toolkit')
 const core = require('@actions/core')
 
 Toolkit.run(async tools => {
-    
+
     const { context } = tools
     tools.log.info(`Event type is: ${context.event}`)
     let { number } = context.payload
@@ -16,16 +16,34 @@ Toolkit.run(async tools => {
         repository,
         generate_only = false
     } = tools.inputs
-    
+
     number = pr_number || number
     if (!number) {
         tools.exit.failure('This is not a pull_request event, and there was no pr_number provided!')
     }
 
-    repos = repository || process.env.GITHUB_REPOSITORY
-    if (!repos) {
-        tools.exit.failure('There was no repository found or provided!')
+    function repo(inputRepo) {
+        if (inputRepo) {
+            const [owner, repo] = inputRepo.split('/')
+            return { owner, repo }
+        }
+        if (process.env.GITHUB_REPOSITORY) {
+            const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/')
+            return { owner, repo }
+        }
+
+        if (this.payload.repository) {
+            return {
+                owner: this.payload.repository.owner.login,
+                repo: this.payload.repository.name
+            }
+        }
+
+        throw new Error('context.repo requires a GITHUB_REPOSITORY environment variable like \'owner/repo\'')
     }
+
+    repos = repo(repository)
+
     if (!status) { } else if (status === '') {
         tools.log.success('The status was an empty string. \n\
         This happens when the output of the step being checked for a status is empty, \n\
@@ -53,16 +71,16 @@ Toolkit.run(async tools => {
         tools.exit.success('We did it team!')
     }
 
-    const { owner, repo } = repos.split('/')
-    core.debug(`The query fields: ${JSON.stringify({ owner: owner, repo: repo, pull_number: number })}`)
-    const pull_response = await tools.github.pulls.get({ owner: owner, repo: repo, pull_number: number })
+
+    core.debug(`The query fields: ${JSON.stringify({ ...repos, pull_number: number })}`)
+    const pull_response = await tools.github.pulls.get({ ...repos, pull_number: number })
 
     const { id, labels } = pull_response.data
     let addLabelExists = false
     for (let l of labels) {
         if (l.name.startsWith(removeLabel)) {
             core.debug(`Removing label ${removeLabel}`)
-            github.issues.removeLabel({ issue_number: number, owner: owner, repo: repo, name: removeLabel })
+            github.issues.removeLabel({ ...repos, issue_number: number, name: removeLabel })
         }
         if (l.name.startsWith(addLabel)) {
             core.debug(`Label ${addLabel} already in place`)
@@ -72,7 +90,7 @@ Toolkit.run(async tools => {
 
     if (addLabelExists === false) {
         core.debug(`Adding label ${addLabel}`)
-        github.issues.addLabels({ issue_number: number, owner: owner, repo: repo, labels: [addLabel] })
+        github.issues.addLabels({ ...repos, issue_number: number, labels: [addLabel] })
     }
 
 
