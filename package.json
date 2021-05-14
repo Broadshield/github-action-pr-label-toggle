@@ -1,6 +1,6 @@
 {
   "name": "github-action-git-jira-changelog",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "This action generates a change log file from commit messages. Grouping Jira Commits, Conventional Commits, and summarizing minor changes",
   "main": "index.js",
   "repository": "git@github.com:Broadshield/github-action-git-jira-changelog.git",
