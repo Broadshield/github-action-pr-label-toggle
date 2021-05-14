@@ -1,14 +1,6 @@
 name: Pull Release Label Toggle
-description: >
-  Allows toggling of a label between two states, such as success or failure.
-  This action should be used with: if: always()
-  This action will check the actual status
-  i.e. `Unit Tests Success` > `Unit Tests Failing`
-  To access other repos pull requests, add an environment variable to this action of:
-  ```yaml
-  env:
-    GITHUB_TOKEN: your token
-  ```
+description: Creates or updates a PR label based on Success or failure of GitHub Action Steps
+
 branding:
   icon: 'book_open'
   color: 'blue'
@@ -40,7 +32,7 @@ inputs:
     required: false
   generate_only:
     description: If true, do not update the label, just output the generated name
-  
+
 outputs:
   add_label_name:
     description: The label name to add

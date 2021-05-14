@@ -1,10 +1,12 @@
-const { Toolkit } = require('actions-toolkit')
+const {Toolkit} = require('actions-toolkit')
 
 describe('github-action-pr-label-toggle', () => {
   let action, tools
 
   // Mock Toolkit.run to define `action` so we can call it
-  Toolkit.run = jest.fn((actionFn) => { action = actionFn })
+  Toolkit.run = jest.fn(actionFn => {
+    action = actionFn
+  })
   // Load up our entrypoint file
   require('.')
 

@@ -12,16 +12,23 @@
     "actions-toolkit": "^4.0.0"
   },
   "devDependencies": {
+    "@github/prettier-config": "^0.0.4",
+    "@vercel/ncc": "^0.28.5",
     "@zeit/ncc": "^0.20.4",
     "commitizen": "^4.0.4",
     "eslint": "^5.13.0",
+    "github-action-readme-generator": "^1.0.12",
     "husky": "^4.2.5",
-    "jest": "^25.2.7"
+    "jest": "^25.2.7",
+    "lint-staged": "^11.0.0",
+    "prettier": "^2.3.0"
   },
   "scripts": {
     "test": "NODE_ENV=testing jest",
-    "start": "node ./index.js",
-    "build": "ncc build index.js --minify"
+    "build": "ncc build index.js",
+    "format:fix": "prettier --write \"*.{md,json,yaml,yml,sh,js}\"",
+    "format": "prettier --list-different \"{./,./**}/*.{ts,js,json,md}\"",
+    "generate-docs": "github-action-readme-generator && prettier --write .ghadocs.json README.md && git add .ghadocs.json README.md"
   },
   "config": {
     "commitizen": {
@@ -37,9 +44,13 @@
       "/node_modules/"
     ]
   },
+  "lint-staged": {
+    "*.{md,json,yaml,yml,sh,js}": "prettier --write"
+  },
+  "prettier": "@github/prettier-config",
   "husky": {
     "hooks": {
-      "pre-commit": "yarn run build;git add dist"
+      "pre-commit": "lint-staged;yarn run build;git add dist"
     }
   }
 }
