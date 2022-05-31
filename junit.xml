@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="4" failures="0" errors="0" time="2.918">
+  <testsuite name="repoSplit utility" errors="0" failures="0" skipped="0" timestamp="2022-05-31T20:32:36" time="2.808" tests="4">
+    <testcase classname="repoSplit utility take string &apos;Broadshield/api&apos; and returns object {&quot;owner&quot;:&quot;Broadshield&quot;,&quot;repo&quot;:&quot;api&quot;}" name="repoSplit utility take string &apos;Broadshield/api&apos; and returns object {&quot;owner&quot;:&quot;Broadshield&quot;,&quot;repo&quot;:&quot;api&quot;}" time="0.005">
+    </testcase>
+    <testcase classname="repoSplit utility take null, has environment variable GITHUB_REPOSITORY available and returns object {&quot;owner&quot;:&quot;Broadshield&quot;,&quot;repo&quot;:&quot;api&quot;}" name="repoSplit utility take null, has environment variable GITHUB_REPOSITORY available and returns object {&quot;owner&quot;:&quot;Broadshield&quot;,&quot;repo&quot;:&quot;api&quot;}" time="0.001">
+    </testcase>
+    <testcase classname="repoSplit utility take null, has context available and returns object {&quot;owner&quot;:&quot;Broadshield&quot;,&quot;repo&quot;:&quot;api&quot;}" name="repoSplit utility take null, has context available and returns object {&quot;owner&quot;:&quot;Broadshield&quot;,&quot;repo&quot;:&quot;api&quot;}" time="0.003">
+    </testcase>
+    <testcase classname="github-action-pr-label-toggle exits successfully" name="github-action-pr-label-toggle exits successfully" time="0.029">
+    </testcase>
+  </testsuite>
+</testsuites>

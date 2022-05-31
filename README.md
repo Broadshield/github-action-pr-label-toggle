@@ -17,7 +17,7 @@ To access other repos pull requests, add an environment variable to this action 
 
 ```yaml
 env:
-GITHUB_TOKEN: your token
+  GITHUB_TOKEN: your token
 ```
 
 <!-- start contents -->
