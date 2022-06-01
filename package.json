@@ -1,6 +1,6 @@
 {
   "name": "@Broadshield/github-action-pr-label-toggle",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "This action generates a change log file from commit messages. Grouping Jira Commits, Conventional Commits, and summarizing minor changes",
   "main": "lib/main.js",
   "type": "commonjs",
@@ -94,8 +94,7 @@
     "format": "yarn exec prettier --write . --config .prettierrc.cjs --ignore-unknown",
     "bump": "yarn version -i patch && yarn run release",
     "bump:minor": "yarn version -i minor && yarn run release",
-    "release": "git add .yarn package.json && git commit -m 'chore(release): bump version to ${npm_package_version}' && git tag -a v${npm_package_version} -m 'v${npm_package_version}' && yarn run postversion && yarn run publish",
-    "publish": "yarn npm publish --access public --tag v${npm_package_version}",
+    "release": "git add .yarn package.json && git commit -m 'chore(release): bump version to ${npm_package_version}' && git tag -a v${npm_package_version} -m 'v${npm_package_version}' && yarn run postversion",
     "postversion": "git push origin --follow-tags && git push --tags",
     "precommit": "yarn exec pretty-quick --staged",
     "prepare": "yarn exec husky install",
