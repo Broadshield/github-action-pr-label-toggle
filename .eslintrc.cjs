@@ -13,7 +13,7 @@ module.exports = {
       extends: ['plugin:yml/recommended', 'plugin:yml/prettier', pp],
     },
     {
-      files: ['./src/*.js'],
+      files: ['*.js', '*.cjs'],
       extends: [a, pp],
       rules: {
         'no-plusplus': 'off',
@@ -21,9 +21,11 @@ module.exports = {
         'no-use-before-define': 'off',
         'no-console': 'off',
         'sonarjs/cognitive-complexity': 'off',
-        camelcase: 'off',
+        'camelcase': 'off',
       },
+      parser: '@babel/eslint-parser',
       parserOptions: {
+        requireConfigFile: false,
         sourceType: 'script',
         ecmaVersion: 'latest',
         ecmaFeatures: {
@@ -32,7 +34,7 @@ module.exports = {
       },
     },
     {
-      files: ['*.html', '*.cjs', '*.json', '*.jsx', '*.md'],
+      files: ['*.html', '*.json', '*.md'],
       extends: [a, pp],
       rules: {
         'no-plusplus': 'off',
@@ -82,7 +84,7 @@ module.exports = {
         '@typescript-eslint/array-type': 'error',
         '@typescript-eslint/await-thenable': 'error',
         '@typescript-eslint/ban-ts-comment': 'error',
-        camelcase: 'off',
+        'camelcase': 'off',
 
         '@typescript-eslint/explicit-function-return-type': ['error', { allowExpressions: true }],
         '@typescript-eslint/func-call-spacing': ['error', 'never'],
@@ -107,16 +109,16 @@ module.exports = {
         '@typescript-eslint/promise-function-async': 'error',
         '@typescript-eslint/require-array-sort-compare': 'error',
         '@typescript-eslint/restrict-plus-operands': 'error',
-        semi: 'error',
+        'semi': 'error',
         '@typescript-eslint/semi': 'error',
         '@typescript-eslint/type-annotation-spacing': 'error',
         '@typescript-eslint/unbound-method': 'error',
         'space-before-function-paren': 'off',
       },
       env: {
-        node: true,
-        es6: true,
-        es2021: true,
+        'node': true,
+        'es6': true,
+        'es2021': true,
         'jest/globals': true,
       },
     },

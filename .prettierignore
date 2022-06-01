@@ -9,3 +9,4 @@ README.md
 package-lock.json
 yarn.lock
 package.json
+/.yarn/

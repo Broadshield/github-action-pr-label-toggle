@@ -1,5 +1,5 @@
 name: Pull Release Label Toggle
-description: Creates or updates a PR label based on Success or failure of GitHub Action Steps
+description: Creates or updates a PR label based on Success or Failure of GitHub Action Steps
 
 branding:
   icon: 'book_open'
@@ -51,4 +51,4 @@ outputs:
     description: The pull request that is updated
 runs:
   using: 'node16'
-  main: 'lib/main.js'
+  main: 'lib/main.mjs'
