@@ -4,6 +4,13 @@ import * as github from '@actions/github';
 import { Repo } from './interfaces';
 import { repoSplit } from './utils';
 
+function undefinedOnEmpty(value: string | undefined): string | undefined {
+  if (!value || value === '') {
+    return undefined;
+  }
+  return value;
+}
+
 export async function run(): Promise<void> {
   try {
     const { context } = github;
@@ -11,16 +18,16 @@ export async function run(): Promise<void> {
     core.info(`Event type is: ${context.eventName}`);
     let { number } = payload;
 
-    const status_true_message = core.getInput('status_true_message') ?? 'Success';
-    const status_false_message = core.getInput('status_false_message') ?? 'Failed';
-    const label_prefix = core.getInput('label_prefix') ?? context.job;
+    const status_true_message = undefinedOnEmpty(core.getInput('status_true_message')) ?? 'Success';
+    const status_false_message = undefinedOnEmpty(core.getInput('status_false_message')) ?? 'Failed';
+    const label_prefix = undefinedOnEmpty(core.getInput('label_prefix')) ?? context.job;
     const status = core.getBooleanInput('status');
-    const pr_number = core.getInput('pr_number');
-    const repository = core.getInput('repository');
+    const pr_number = undefinedOnEmpty(core.getInput('pr_number'));
+    const repository = undefinedOnEmpty(core.getInput('repository'));
     const generate_only = core.getBooleanInput('generate_only');
 
     const github_token: string | undefined =
-      core.getInput('github_token', { required: false }) ?? process.env.GITHUB_TOKEN ?? undefined;
+      undefinedOnEmpty(core.getInput('github_token', { required: false })) ?? process.env.GITHUB_TOKEN ?? undefined;
     if (!github_token) {
       core.setFailed('github_token not supplied');
       return;
