@@ -22,6 +22,7 @@ module.exports = {
         'no-console': 'off',
         'sonarjs/cognitive-complexity': 'off',
         'camelcase': 'off',
+        'unicorn/no-process-exit': 'off',
       },
       parser: '@babel/eslint-parser',
       parserOptions: {
@@ -53,7 +54,7 @@ module.exports = {
       processor: 'actions/actions',
     },
     {
-      files: ['*.ts'],
+      files: ['src/*.ts'],
       plugins: ['simple-import-sort', 'import', 'jest', '@typescript-eslint', 'security', 'github'],
       extends: ['eslint:recommended', 'plugin:security/recommended'],
       parser: '@typescript-eslint/parser',

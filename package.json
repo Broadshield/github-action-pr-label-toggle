@@ -1,5 +1,5 @@
 {
-  "name": "github-action-pr-label-toggle",
+  "name": "@Broadshield/github-action-pr-label-toggle",
   "version": "1.1.0",
   "description": "This action generates a change log file from commit messages. Grouping Jira Commits, Conventional Commits, and summarizing minor changes",
   "main": "lib/main.js",

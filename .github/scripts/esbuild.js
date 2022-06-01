@@ -37,9 +37,9 @@ const buildOptions = {
   entryPoints: ['src/index.ts'],
   sourcemap: true,
   platform: 'node',
-  outfile: 'lib/main.mjs',
+  outfile: 'lib/main.js',
   target: 'node16',
-  format: 'esm',
+  format: 'commonjs',
   banner: bundle ? shimBanner : undefined,
   bundle,
 };
