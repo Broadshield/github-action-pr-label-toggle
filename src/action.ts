@@ -19,7 +19,7 @@ export async function run(): Promise<void> {
     let { number } = payload;
 
     const status_true_message = undefinedOnEmpty(core.getInput('status_true_message')) ?? 'Success';
-    const status_false_message = undefinedOnEmpty(core.getInput('status_false_message')) ?? 'Failed';
+    const status_false_message = undefinedOnEmpty(core.getInput('status_false_message')) ?? 'Failure';
     const label_prefix = undefinedOnEmpty(core.getInput('label_prefix')) ?? context.job;
     const status = core.getBooleanInput('status');
     const pr_number = undefinedOnEmpty(core.getInput('pr_number'));

@@ -1,4 +1,4 @@
 module.exports = {
-  ...require('@Broadshield/prettier-config'),
+  ...require('@broadshield/prettier-config'),
   semi: true,
 };

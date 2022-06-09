@@ -26,7 +26,6 @@ module.exports = {
       },
       parser: '@babel/eslint-parser',
       parserOptions: {
-        requireConfigFile: false,
         sourceType: 'script',
         ecmaVersion: 'latest',
         ecmaFeatures: {
@@ -49,9 +48,19 @@ module.exports = {
       },
     },
     {
-      plugins: ['actions'],
+      extends: ['plugin:actions/recommended'],
       files: ['.github/workflows/*.{yml,yaml}'],
-      processor: 'actions/actions',
+    },
+    {
+      files: ['**/*.cjs'],
+      plugins: ['simple-import-sort', 'import'],
+      extends: [a, 'plugin:import/errors', 'eslint:recommended', pp],
+      env: { es2022: true, node: true },
+      parser: '@babel/eslint-parser',
+      parserOptions: {
+        ecmaVersion: 2022,
+        sourceType: 'script',
+      },
     },
     {
       files: ['src/*.ts'],
@@ -59,7 +68,7 @@ module.exports = {
       extends: ['eslint:recommended', 'plugin:security/recommended'],
       parser: '@typescript-eslint/parser',
       parserOptions: {
-        ecmaVersion: 'es2021',
+        ecmaVersion: 2022,
         sourceType: 'module',
         project: ['./tsconfig.json'],
         tsconfigRootDir: __dirname,
