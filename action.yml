@@ -43,6 +43,8 @@ inputs:
     required: false
     default: false
   use_job_name_as_prefix:
+    required: false
+    default: false
     description: |
       the label prefix will be generated from the current action's job name:
       underscores and hyphens are turned to spaces, first letter of each word
