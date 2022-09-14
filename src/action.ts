@@ -3,14 +3,7 @@ import * as github from '@actions/github';
 import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 
 import { Repo } from './interfaces';
-import { prefixParser, repoSplit } from './utils';
-
-function undefinedOnEmpty(value: string | undefined): string | undefined {
-  if (!value || value === '') {
-    return undefined;
-  }
-  return value;
-}
+import { prefixParser, repoSplit, undefinedOnEmpty } from './utils';
 
 export async function run(): Promise<void> {
   try {
@@ -24,15 +17,16 @@ export async function run(): Promise<void> {
     const default_failure_suffix = use_emoji ? `❌` : `Failed`;
     const status_true_message = undefinedOnEmpty(core.getInput('status_true_message')) ?? default_success_suffix;
     const status_false_message = undefinedOnEmpty(core.getInput('status_false_message')) ?? default_failure_suffix;
-    const label_prefix = use_job_name_as_prefix ? core.getInput('label_prefix') : prefixParser(job);
+    const label_prefix = use_job_name_as_prefix ? undefinedOnEmpty(core.getInput('label_prefix')) : prefixParser(job);
     const status = core.getBooleanInput('status');
     const pr_number = undefinedOnEmpty(core.getInput('pr_number'));
     const repository = undefinedOnEmpty(core.getInput('repository'));
     const generate_only = core.getBooleanInput('generate_only');
 
-    if (undefinedOnEmpty(label_prefix) === undefined) {
+    if (!label_prefix) {
       core.warning('No label prefix was supplied');
-      return;
+      // trunk-ignore(eslint/unicorn/no-process-exit)
+      process.exit(0);
     }
     const github_token: string | undefined =
       undefinedOnEmpty(core.getInput('github_token', { required: false })) ?? process.env.GITHUB_TOKEN ?? undefined;

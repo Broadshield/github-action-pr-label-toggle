@@ -93,4 +93,5 @@ describe('github-action-pr-label-toggle', () => {
   it('exits successfully', () => {
     run();
   });
+  it('creates label from job')
 });
