@@ -29,6 +29,7 @@ inputs:
       The PR number to change the labels on. This is used when the action is triggered
       by something other than a PR such as a PR comment, or a push, or anything else.
     required: false
+    default: ${{github.number}}
   repository:
     description: >
       If not provided, this is the same as github.repository i.e:

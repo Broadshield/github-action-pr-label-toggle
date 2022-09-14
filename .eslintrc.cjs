@@ -13,7 +13,7 @@ module.exports = {
       extends: ['plugin:yml/recommended', 'plugin:yml/prettier', pp],
     },
     {
-      files: ['*.js', '*.cjs'],
+      files: ['.babelrc.cjs', '.eslintrc.cjs', '.prettierrc.cjs', 'jest.config.js'],
       extends: [a, pp],
       rules: {
         'no-plusplus': 'off',
@@ -44,7 +44,6 @@ module.exports = {
     {
       files: ['*.json'],
       extends: ['plugin:json/recommended', pp],
-      // parser: 'jsonc-eslint-parser', // Set this parser.
       rules: { 'json/*': ['error', 'allowComments'] },
     },
     {
@@ -56,19 +55,75 @@ module.exports = {
       extends: ['plugin:actions/recommended'],
     },
     {
-      files: ['**/*.cjs'],
+      files: ['.github/scripts/*.cjs'],
       plugins: ['simple-import-sort', 'import'],
       extends: [a, 'plugin:import/errors', 'eslint:recommended', pp],
       env: { es2022: true, node: true },
       parser: '@babel/eslint-parser',
       parserOptions: {
         ecmaVersion: 2022,
-        sourceType: 'script',
+        sourceType: 'module',
+      },
+      rules: {
+        'import/no-extraneous-dependencies': 0,
+      },
+    },
+    {
+      files: ['__tests__/**/*.ts'],
+      plugins: ['simple-import-sort', 'import', 'jest', '@typescript-eslint', 'optimize-regex'],
+      extends: [
+        'eslint:recommended',
+        'plugin:@typescript-eslint/recommended',
+        'airbnb-base',
+        'plugin:import/errors',
+        'plugin:import/warnings',
+        'plugin:import/typescript',
+        'plugin:sonarjs/recommended',
+        'plugin:unicorn/recommended',
+        'plugin:optimize-regex/recommended',
+        pp,
+      ],
+
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        ecmaVersion: 2022,
+        sourceType: 'module',
+        project: ['./__tests__/tsconfig.json'],
+        tsconfigRootDir: __dirname,
+      },
+      rules: {
+        'jest/no-disabled-tests': 'warn',
+        'jest/no-focused-tests': 'error',
+        'jest/no-identical-title': 'error',
+        'jest/prefer-to-have-length': 'warn',
+        'jest/valid-expect': 'error',
+        'import/extensions': [
+          'error',
+          'ignorePackages',
+          {
+            js: 'never',
+            mjs: 'never',
+            jsx: 'never',
+            ts: 'never',
+            tsx: 'never',
+          },
+        ],
+        'no-console': 0,
+      },
+      env: {
+        'jest/globals': true,
       },
     },
     {
       files: ['src/**/*.ts'],
-      plugins: ['simple-import-sort', 'import', 'jest', '@typescript-eslint', 'security', 'optimize-regex'],
+      plugins: [
+        'simple-import-sort',
+        'import',
+        'jest',
+        '@typescript-eslint',
+        'security',
+        'optimize-regex',
+      ],
       extends: [
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended',
@@ -91,18 +146,30 @@ module.exports = {
         tsconfigRootDir: __dirname,
       },
       rules: {
+        'import/no-extraneous-dependencies': 0,
+        'max-len': 0,
+        'maximumLineLength': 0,
+        'no-use-before-define': 'off',
+        '@typescript-eslint/no-use-before-define': ['error'],
+        'no-shadow': 'off',
+        '@typescript-eslint/no-shadow': ['error'],
+        '@typescript-eslint/no-object-literal-type-assertion': 'off',
+        '@typescript-eslint/prefer-interface': 'off',
+        '@typescript-eslint/camelcase': 'off',
+
         'import/prefer-default-export': 'off',
         'import/extensions': [
           'error',
           'ignorePackages',
           {
             js: 'never',
+            mjs: 'never',
             jsx: 'never',
             ts: 'never',
             tsx: 'never',
           },
         ],
-        'operator-linebreak': ['error', 'after'],
+        'operator-linebreak': ['error', 'after', { overrides: { '?': 'before', ':': 'before' } }],
         'dot-notation': 'off',
         '@typescript-eslint/dot-notation': ['error'],
         '@typescript-eslint/array-type': 'error',
@@ -110,7 +177,10 @@ module.exports = {
         '@typescript-eslint/ban-ts-comment': 'error',
         '@typescript-eslint/consistent-type-assertions': 'error',
         '@typescript-eslint/explicit-function-return-type': ['error', { allowExpressions: true }],
-        '@typescript-eslint/explicit-member-accessibility': ['error', { accessibility: 'no-public' }],
+        '@typescript-eslint/explicit-member-accessibility': [
+          'error',
+          { accessibility: 'no-public' },
+        ],
         '@typescript-eslint/func-call-spacing': ['error', 'never'],
         '@typescript-eslint/lines-between-class-members': ['error'],
         '@typescript-eslint/no-explicit-any': 'off',
@@ -172,6 +242,14 @@ module.exports = {
         'es6': true,
         'es2021': true,
         'jest/globals': true,
+      },
+      settings: {
+        'import/resolver': {
+          node: {
+            extensions: ['.js', '.ts', '.jsx', '.tsx', '.json'],
+          },
+        },
+        'import/extensions': ['.js', '.ts', '.mjs', '.jsx', '.tsx'],
       },
     },
   ],

@@ -4,7 +4,7 @@ root = true
 [*]
 charset = utf-8
 indent_style = space
-indent_size = 4
+indent_size = 2
 insert_final_newline = true
 trim_trailing_whitespace = true
 end_of_line = lf
@@ -15,16 +15,6 @@ quote_type = double
 [*.md]
 max_line_length = off
 trim_trailing_whitespace = false
-
-root=true
-
-[*]
-indent_style = space
-indent_size = 2
-insert_final_newline = true
-trim_trailing_whitespace = true
-end_of_line = lf
-charset = utf-8
 
 [{**/dist/**,**/build/**,**/node_modules/**,**/vendor/**,**/target/**}]
 indent_style = ignore

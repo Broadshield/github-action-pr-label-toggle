@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    "git-tag",
+    "conventional-commits",
+    "released"
+  ],
+  "owner": "Broadshield",
+  "repo": "github-action-pr-label-toggle",
+  "name": "Jamie Nelson",
+  "email": "jamie@wearsafe.com",
+  "onlyPublishWithReleaseLabel": true
+}

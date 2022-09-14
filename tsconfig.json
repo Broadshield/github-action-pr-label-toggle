@@ -25,7 +25,11 @@
     ],
     "paths": {
       "__tests__/*": ["__tests__/*"]
-    }
+    },
+    "types": [
+      "jest",
+      "node"
+    ]
   },
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "GitHub Actions (Node 16)",

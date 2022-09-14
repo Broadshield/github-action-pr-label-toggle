@@ -1,3 +1,5 @@
+const eslint = require('esbuild-plugin-eslint');
+
 const ESM_REQUIRE_SHIM = `
 await (async () => {
   const { dirname } = await import("path");
@@ -33,19 +35,17 @@ const shimBanner = {
 /**
  * ESNext + ESM, bundle: true, and require() shim in banner.
  */
-const buildOptions = {
-  entryPoints: ['src/index.ts'],
-  sourcemap: true,
-  platform: 'node',
-  outfile: 'lib/main.mjs',
-  target: 'node16',
-  format: 'esm',
-  banner: bundle ? shimBanner : undefined,
-  bundle,
-};
 
 require('esbuild')
   .build({
-    ...buildOptions,
+    entryPoints: ['src/index.ts'],
+    sourcemap: true,
+    platform: 'node',
+    outfile: 'lib/main.mjs',
+    target: 'node16',
+    format: 'esm',
+    banner: bundle ? shimBanner : undefined,
+    bundle,
+    plugins: [eslint({ fix: true })],
   })
   .catch(() => process.exit(1));

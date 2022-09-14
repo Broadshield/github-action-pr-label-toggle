@@ -2,7 +2,7 @@ import * as core from '@actions/core';
 import * as github from '@actions/github';
 import { Repo } from '../src/interfaces';
 import { repoSplit } from '../src/utils';
-import { run } from '../src/action';
+import * as Action from '../src/action';
 
 interface InputsInterfaceStrings {
   [key: string]: string;
@@ -59,17 +59,17 @@ describe('repoSplit utility', () => {
     expect(repoSplit(repository, github.context)).toStrictEqual(result);
   });
 
-  test(`take null, has environment variable GITHUB_REPOSITORY available and returns object ${JSON.stringify(
+  test(`take undefined, has environment variable GITHUB_REPOSITORY available and returns object ${JSON.stringify(
     result,
   )}`, () => {
     process.env.GITHUB_REPOSITORY = repository;
-    expect(repoSplit(null, github.context)).toStrictEqual(result);
+    expect(repoSplit(undefined, github.context)).toStrictEqual(result);
   });
 
-  test(`take null, has context available and returns object ${JSON.stringify(result)}`, () => {
+  test(`take undefined, has context available and returns object ${JSON.stringify(result)}`, () => {
     delete process.env.GITHUB_REPOSITORY;
 
-    expect(repoSplit(null, github.context)).toStrictEqual(result);
+    expect(repoSplit(undefined, github.context)).toStrictEqual(result);
   });
 });
 
@@ -91,6 +91,29 @@ describe('github-action-pr-label-toggle', () => {
   });
 
   it('exits successfully', () => {
-    run();
+    expect(Action.run()).toHaveReturned();
+  });
+  it('creates titlecase label from job name', () => {
+    // Mock github context
+    jest.spyOn(github.context, 'repo', 'get').mockImplementation(() => {
+      return {
+        repo: 'api',
+        owner: 'Broadshield',
+      };
+    });
+    jest.spyOn(github.context, 'eventName', 'get').mockImplementation(() => {
+      return 'pull_request';
+    });
+    jest.spyOn(github.context, 'payload', 'get').mockImplementation(() => {
+      return { number: 1 };
+    });
+    jest.spyOn(github.context, 'job', 'get').mockImplementation(() => {
+      return 'integration_tests';
+    });
+
+    const repos = repoSplit(undefined, github.context)!;
+    const octokit = github.getOctokit("fakeToken");
+    expect(Action.getCurrentLabels(octokit, repos, 1));
+
   });
 });
