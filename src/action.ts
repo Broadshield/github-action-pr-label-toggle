@@ -1,8 +1,9 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
+import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 
 import { Repo } from './interfaces';
-import { repoSplit } from './utils';
+import { prefixParser, repoSplit } from './utils';
 
 function undefinedOnEmpty(value: string | undefined): string | undefined {
   if (!value || value === '') {
@@ -14,18 +15,25 @@ function undefinedOnEmpty(value: string | undefined): string | undefined {
 export async function run(): Promise<void> {
   try {
     const { context } = github;
-    const { payload } = context;
-    core.info(`Event type is: ${context.eventName}`);
+    const { payload, eventName, job } = context;
+    core.info(`Event type is: ${eventName}`);
     let { number } = payload;
-
-    const status_true_message = undefinedOnEmpty(core.getInput('status_true_message')) ?? 'Success';
-    const status_false_message = undefinedOnEmpty(core.getInput('status_false_message')) ?? 'Failure';
-    const label_prefix = undefinedOnEmpty(core.getInput('label_prefix')) ?? context.job;
+    const use_emoji = core.getBooleanInput('use_emoji');
+    const use_job_name_as_prefix = core.getBooleanInput('use_job_name_as_prefix');
+    const default_success_suffix = use_emoji ? `✅` : 'Success';
+    const default_failure_suffix = use_emoji ? `❌` : `Failed`;
+    const status_true_message = undefinedOnEmpty(core.getInput('status_true_message')) ?? default_success_suffix;
+    const status_false_message = undefinedOnEmpty(core.getInput('status_false_message')) ?? default_failure_suffix;
+    const label_prefix = use_job_name_as_prefix ? core.getInput('label_prefix') : prefixParser(job);
     const status = core.getBooleanInput('status');
     const pr_number = undefinedOnEmpty(core.getInput('pr_number'));
     const repository = undefinedOnEmpty(core.getInput('repository'));
     const generate_only = core.getBooleanInput('generate_only');
 
+    if (undefinedOnEmpty(label_prefix) === undefined) {
+      core.warning('No label prefix was supplied');
+      return;
+    }
     const github_token: string | undefined =
       undefinedOnEmpty(core.getInput('github_token', { required: false })) ?? process.env.GITHUB_TOKEN ?? undefined;
     if (!github_token) {
@@ -74,11 +82,13 @@ export async function run(): Promise<void> {
 
     const { labels } = pull_response.data;
     let addLabelExists = false;
+    type RemoveLabelResponseType = GetResponseTypeFromEndpointMethod<typeof octokit.rest.issues.removeLabel>;
+    const promiseArray: Promise<RemoveLabelResponseType>[] = [];
     for (const l of labels) {
       if (l.name) {
         if (l.name.startsWith(removeLabel)) {
           core.notice(`Removing label ${removeLabel}`);
-          await octokit.rest.issues.removeLabel({ ...repos, issue_number: number, name: removeLabel });
+          promiseArray.push(octokit.rest.issues.removeLabel({ ...repos, issue_number: number, name: removeLabel }));
         }
         if (l.name.startsWith(addLabel)) {
           core.notice(`Label ${addLabel} already in place`);
@@ -86,6 +96,8 @@ export async function run(): Promise<void> {
         }
       }
     }
+
+    await Promise.all(promiseArray);
 
     if (addLabelExists === false) {
       core.notice(`Adding label ${addLabel}`);

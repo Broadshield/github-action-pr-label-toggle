@@ -9,7 +9,8 @@ lerna-debug.*
 junit.xml
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
-
+.trunk/actions
+.trunk/notifications
 # Runtime data
 pids
 *.pid

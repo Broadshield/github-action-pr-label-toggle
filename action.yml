@@ -8,14 +8,12 @@ inputs:
   status_true_message:
     description: This is a word like Passing, Success, Found, or 👍
     required: false
-    default: Success
   status_false_message:
     description: This is a word like Error, Failure, Success, Not Found, or 👎
     required: false
-    default: Failed
   label_prefix:
     description: The prefix of the label to toggle like Unit Tests, DB Dump
-    required: true
+    required: false
   status:
     description: >
       This is a boolean status that can be passed in to override the detected status.
@@ -25,6 +23,7 @@ inputs:
     description: >
       The GitHub token to use for authentication.
     required: false
+    default: ${{github.token}}
   pr_number:
     description: >
       The PR number to change the labels on. This is used when the action is triggered
@@ -39,6 +38,18 @@ inputs:
     description: If true, do not update the label, just output the generated name
     required: false
     default: false
+  use_emoji:
+    description: Switch the default `Success` to `✅` and `Failed` to `❌`
+    required: false
+    default: false
+  use_job_name_as_prefix:
+    description: |
+      the label prefix will be generated from the current action's job name:
+      underscores and hyphens are turned to spaces, first letter of each word
+      is capitalized.
+      Means the `label_prefix` can be empty.
+      `unit_tests` -> `Unit Tests`
+      `spellcheck` -> `Spellcheck`
 
 outputs:
   add_label_name:
