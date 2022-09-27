@@ -1,5 +1,7 @@
+/* eslint-disable unicorn/no-null */
 import * as core from '@actions/core';
 import * as github from '@actions/github';
+import { WebhookPayload } from '@actions/github/lib/interfaces';
 import { Repo } from '../src/interfaces';
 import { repoSplit } from '../src/utils';
 import * as Action from '../src/action';
@@ -93,7 +95,7 @@ describe('github-action-pr-label-toggle', () => {
   it('exits successfully', () => {
     expect(Action.run()).toHaveReturned();
   });
-  it('creates titlecase label from job name', () => {
+  it('creates titlecase label from job name', async () => {
     // Mock github context
     jest.spyOn(github.context, 'repo', 'get').mockImplementation(() => {
       return {
@@ -110,11 +112,35 @@ describe('github-action-pr-label-toggle', () => {
     jest.spyOn(github.context, 'job', 'get').mockImplementation(() => {
       return 'integration_tests';
     });
+    jest.spyOn(github.context, 'payload', 'get').mockImplementation(() => {
+      return {} as WebhookPayload;
+    });
+    const lbls: Action.PullRequestLabels = [
+      {
+        id: 1,
+        node_id: 'a',
+        url: 'https://api.github.com/repos/Broadshield/api/labels/Integration%20Tests',
+        name: 'Unit Tests Failed',
+        description: null,
+        color: '#d93f0b',
+        default: true,
+      },
+      {
+        id: 2,
+        node_id: 'b',
+        url: 'https://api.github.com/repos/Broadshield/api/labels/Integration%20Tests',
+        name: 'Integration Test Success',
+        description: null,
+        color: '#d93f0b',
+        default: true,
+      },
+    ];
 
-    const repos = repoSplit(undefined, github.context)!;
-    const octokit = github.getOctokit("fakeToken");
-    expect(Action.getCurrentLabels(octokit, repos, 1));
-
+    jest.spyOn(Action, 'getCurrentLabels').mockResolvedValue(Promise.resolve(lbls));
+    const repos = repoSplit(undefined, github.context);
+    expect(repos).toBeDefined();
+    const octokit = github.getOctokit('fakeToken');
+    expect(await Action.getCurrentLabels(octokit, repos!, 1)).toReturnWith(lbls);
   });
-  it('creates label from job')
+  // it('creates label from job');
 });
