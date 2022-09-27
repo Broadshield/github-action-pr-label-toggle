@@ -6,6 +6,7 @@ import type { RestEndpointMethodTypes } from '@octokit/plugin-rest-endpoint-meth
 
 import ActionInputs from './inputs';
 import { Repo } from './interfaces';
+import { MissingLabelPrefixError } from './label-error';
 
 export type GithubOctokitType = InstanceType<typeof GitHub>;
 
@@ -72,7 +73,8 @@ export async function run(): Promise<void> {
 
     if (!inputs.label_prefix) {
       core.warning('No label prefix was supplied');
-      return;
+      // trunk-ignore(eslint/unicorn/no-process-exit)
+      throw new MissingLabelPrefixError('No label prefix was supplied');
     }
 
     const octokit = github.getOctokit(inputs.github_token);

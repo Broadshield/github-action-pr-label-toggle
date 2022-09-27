@@ -1,3 +1,12 @@
-import { run } from './action';
+import * as core from '@actions/core';
 
-run();
+import { run } from './action';
+import { MissingLabelPrefixError } from './label-error';
+
+run().catch((error) => {
+  if (error instanceof MissingLabelPrefixError) {
+    core.warning(error.message);
+  } else if (error instanceof Error) {
+    core.setFailed(error.message);
+  }
+});

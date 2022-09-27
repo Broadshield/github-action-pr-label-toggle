@@ -146,6 +146,7 @@ module.exports = {
         tsconfigRootDir: __dirname,
       },
       rules: {
+        'unicorn/no-hex-escape': 0,
         'import/no-extraneous-dependencies': 0,
         'max-len': 0,
         'maximumLineLength': 0,

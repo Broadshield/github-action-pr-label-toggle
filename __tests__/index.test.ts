@@ -116,4 +116,5 @@ describe('github-action-pr-label-toggle', () => {
     expect(Action.getCurrentLabels(octokit, repos, 1));
 
   });
+  it('creates label from job')
 });
