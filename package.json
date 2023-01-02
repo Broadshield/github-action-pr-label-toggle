@@ -15,7 +15,7 @@
     "@octokit/plugin-request-log": "^1.0.4",
     "@octokit/types": "^7.4.0",
     "actions-toolkit": "^6.0.1",
-    "esbuild": "^0.15.7"
+    "esbuild": "^0.16.12"
   },
   "devDependencies": {
     "@babel/core": "^7.19.1",
