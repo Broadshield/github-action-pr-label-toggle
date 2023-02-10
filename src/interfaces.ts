@@ -9,7 +9,7 @@ export const BumpType = {
   Major: 'major',
   Build: 'build',
 } as const;
-export type Bump = typeof BumpType[keyof typeof BumpType];
+export type Bump = (typeof BumpType)[keyof typeof BumpType];
 
 // // eslint-disable-next-line no-shadow
 // export enum Ordering {

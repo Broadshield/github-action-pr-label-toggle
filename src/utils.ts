@@ -34,6 +34,7 @@ export function titlecase(text: string): string | undefined {
   );
 }
 export function prefixParser(text: string | undefined): string | undefined {
+  core.debug(`prefixParser called with ${text ?? 'undefined'}`);
   if (!text) return undefined;
   if (typeof text !== 'string') {
     throw new TypeError(`Invalid argument type provided to prefixParser(): ${typeof text}`);

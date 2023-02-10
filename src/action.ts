@@ -67,7 +67,7 @@ export async function getCurrentLabels(
   return pull_response.data.labels;
 }
 
-export async function run(): Promise<void> {
+export async function run(): Promise<boolean> {
   try {
     const inputs = ActionInputs.load();
 
@@ -80,13 +80,13 @@ export async function run(): Promise<void> {
     const octokit = github.getOctokit(inputs.github_token);
     core.setOutput('add_label_name', inputs.addLabel);
     core.setOutput('remove_label_name', inputs.removeLabel);
-    core.setOutput('repository', inputs.repos);
+    core.setOutput('repository', `${inputs.repos.owner}/${inputs.repos.repo}`);
     core.setOutput('pr_number', inputs.pr_number);
 
     if (inputs.generate_only === true) {
       // exit early
       core.notice('We did it team!');
-      return;
+      return true;
     }
 
     const labels = await getCurrentLabels(octokit, inputs.repos, inputs.pr_number);
@@ -98,5 +98,7 @@ export async function run(): Promise<void> {
     core.info('Label update complete');
   } catch (error) {
     core.setFailed(`ERROR: ${error}`);
+    return false;
   }
+  return true;
 }

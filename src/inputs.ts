@@ -29,6 +29,8 @@ export default class ActionInputs {
     const { context } = github;
     const { payload, job } = context;
     const { number: payload_pr_number } = payload;
+    core.debug(`Payload: ${JSON.stringify(payload)}`);
+    core.debug(`Context: ${JSON.stringify(context)}`);
     this.pr_number = undefinedOnEmpty(core.getInput('pr_number')) ?? payload_pr_number;
     if (!this.pr_number) {
       core.setFailed('This is not a pull_request event, and there was no pr_number provided!');
@@ -50,8 +52,8 @@ export default class ActionInputs {
     this.status_false_message =
       undefinedOnEmpty(core.getInput('status_false_message')) ?? default_failure_suffix;
     this.label_prefix = use_job_name_as_prefix
-      ? undefinedOnEmpty(core.getInput('label_prefix'))
-      : prefixParser(job);
+      ? prefixParser(job)
+      : undefinedOnEmpty(core.getInput('label_prefix'));
     this.generate_only = core.getBooleanInput('generate_only');
     this.status = core.getBooleanInput('status');
 
